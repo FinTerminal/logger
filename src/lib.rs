@@ -1,5 +1,5 @@
+use colored::Colorize;
 use std::fmt::Display;
-
 
 pub enum Type {
     Log,
@@ -18,5 +18,11 @@ impl Display for Type {
 }
 
 pub fn log(function: &str, t: Type, content: impl std::fmt::Display) {
-    println!("{}", format!("[{}] {}: {}", t, function, content));
+    let output = match t {
+        Type::Error => format!("[{}]: {}", function, content).red(),
+        Type::Warning => format!("[{}]: {}", function, content).yellow(),
+        Type::Log =>  format!("[{}]: {}", function, content).white(),
+    };
+
+    println!("{}", output);
 }
