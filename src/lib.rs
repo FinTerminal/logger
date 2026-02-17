@@ -1,14 +1,22 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use std::fmt::Display;
+
+
+pub enum Type {
+    Log,
+    Warning,
+    Error,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+impl Display for Type {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Type::Error => write!(f, "Error"),
+            Type::Warning => write!(f, "Warning"),
+            Type::Log => write!(f, "Log"),
+        }
     }
+}
+
+pub fn log(function: &str, t: Type, content: impl std::fmt::Display) {
+    println!("{}", format!("[{}] {}: {}", t, function, content));
 }
