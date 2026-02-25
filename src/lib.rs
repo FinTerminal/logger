@@ -37,14 +37,19 @@ impl Logger {
     }
 
     pub fn log(&self, function: &str, t: Type, content: impl std::fmt::Display) {
+        let formatted_function: String;
         let function_arr = function.split("::").collect::<Vec<&str>>();
-        let function =
-            function_arr[((function_arr.len() - 1) - (self.depth as usize))..].join("::");
+        if function_arr.len() > 1 && function.len() > (self.depth as usize) {
+            formatted_function =
+                function_arr[((function_arr.len() - 1) - (self.depth as usize))..].join("::");
+        } else {
+            formatted_function = function.to_string();
+        }
 
         let output = match t {
-            Type::Error => format!("[{}]: {}", function, content).red(),
-            Type::Warning => format!("[{}]: {}", function, content).yellow(),
-            Type::Log => format!("[{}]: {}", function, content).white(),
+            Type::Error => format!("[{}]: {}", formatted_function, content).red(),
+            Type::Warning => format!("[{}]: {}", formatted_function, content).yellow(),
+            Type::Log => format!("[{}]: {}", formatted_function, content).white(),
         };
 
         println!("{}", output);
@@ -52,13 +57,19 @@ impl Logger {
 }
 
 pub fn log(function: &str, t: Type, content: impl std::fmt::Display) {
+    let formatted_function: String;
     let function_arr = function.split("::").collect::<Vec<&str>>();
-    let function = function_arr[((function_arr.len() - 1) - 1)..].join("::");
+    if function_arr.len() > 2 {
+        formatted_function =
+            function_arr[((function_arr.len() - 1) - 1)..].join("::");
+    } else {
+        formatted_function = function.to_string();
+    }
 
     let output = match t {
-        Type::Error => format!("[{}]: {}", function, content).red(),
-        Type::Warning => format!("[{}]: {}", function, content).yellow(),
-        Type::Log => format!("[{}]: {}", function, content).white(),
+        Type::Error => format!("[{}]: {}", formatted_function, content).red(),
+        Type::Warning => format!("[{}]: {}", formatted_function, content).yellow(),
+        Type::Log => format!("[{}]: {}", formatted_function, content).white(),
     };
 
     println!("{}", output);
